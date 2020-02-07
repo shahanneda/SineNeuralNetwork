@@ -3,26 +3,26 @@ from keras.optimizers import SGD;
 from keras.models import Sequential;
 from keras.layers import Dense;
 from keras.utils import plot_model;
+import matplotlib.pyplot as plt;
+import math
 import os;
 
 class Main:
-    listOfIn = [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1];
-    listOfOut = [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0];
+    listOfIn = [];
+    listOfOut = [];
     def __init__(self):
         #self.PrintFirst1000IntArray();
 
         print("test");
         self.createData();
-        print(self.a);
         self.model = Sequential();
 
-        self. model.add(Dense(units=1, activation='relu', input_shape=(1,) ))
+        self.model.add(Dense(units=1, activation='sigmoid', input_shape=(1,) ))
         
-        self.model.add(Dense(units=2, activation='relu'))
-        self.model.add(Dense(units=2, activation='relu'))
-        self.model.add(Dense(units=2, activation='relu'))
+        self.model.add(Dense(units=100, activation='sigmoid'))
+        self.model.add(Dense(units=100, activation='sigmoid'))
 
-        self.model.add(Dense(units=1, activation='softmax' ) )
+        self.model.add(Dense(units=1, activation='sigmoid' ) )
 
         sgdOptimizer = SGD(lr=0.001, momentum=0.0, nesterov=False)
 
@@ -57,31 +57,50 @@ class Main:
                     ask2 = input("Value: ");
                     if(ask2 == 'q'):
                         break;
-                    print(self.predict(ask));
+                    print(self.predict(ask2));
             if ask == 4:
                 plot_model(self.model, 'model.png', show_shapes=True, show_layer_names=True);
                 os.system("open model.png");
                 print("saved model to model.png");
 
+            if ask == 5:
+                self.plotData();
+
             if ask == 'q':
                 break;
+
                 
         
 
     def createData(self):
-        self.a = np.array([2,3,4,5]);
+        for i in range(1,90):
+            self.listOfIn.append(i);
+            self.listOfOut.append(math.sin(i* (math.pi/180) ));
+            
         
     def train(self):
 
         listOfNum = np.array(self.listOfIn);
-        self.model.fit(listOfNum, np.array(self.listOfOut), epochs=5, batch_size=1);
+        self.model.fit(listOfNum, np.array(self.listOfOut), epochs=50, batch_size=1);
+
+        print(self.model.evaluate(np.array(self.listOfIn), np.array(self.listOfOut)));
+        
                 
+    def plotData(self):
+        plt.plot(self.listOfIn, self.listOfOut);
+        modelOutput = self.model.predict(self.listOfIn, batch_size=1);
+        plt.plot(self.listOfIn, modelOutput);
+
+        plt.show();
+
+
     def predict(self, value):
         #num = [int(x) for x in bin(value)[2:] ]  # this is to convert the number in to binary
         predictInput = np.array([value]);
+        print(self.listOfIn);
+        print(self.listOfOut);
 
         #predictInput.reshape(1,);#this is to reshapee so it does not give errror about dense layer neeidng 2
-        print(predictInput.shape);
 
         predictions = self.model.predict(predictInput, batch_size=1) # batch size is how many it does at once
 
