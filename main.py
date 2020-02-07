@@ -2,10 +2,12 @@ import numpy as np
 from keras.optimizers import SGD;
 from keras.models import Sequential;
 from keras.layers import Dense;
+from keras.utils import plot_model;
+import os;
 
 class Main:
-    listOfIn =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
-    listOfOut =[[0,1], [1,0], [0,1], [1,0], [0,1], [1,0],[0,1], [1,0],[0,1], [1,0],[0,1], [1,0],[0,1], [1,0],[0,1], [1,0],[0,1], [1,0],[0,1], [1,0]];
+    listOfIn = [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1];
+    listOfOut = [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0];
     def __init__(self):
         #self.PrintFirst1000IntArray();
 
@@ -14,12 +16,17 @@ class Main:
         print(self.a);
         self.model = Sequential();
 
-        self. model.add(Dense(units=2, activation='relu', input_shape=(2,) ))
-        self.model.add(Dense(units=2, activation='softmax' ) )
+        self. model.add(Dense(units=1, activation='relu', input_shape=(1,) ))
+        
+        self.model.add(Dense(units=2, activation='relu'))
+        self.model.add(Dense(units=2, activation='relu'))
+        self.model.add(Dense(units=2, activation='relu'))
+
+        self.model.add(Dense(units=1, activation='softmax' ) )
 
         sgdOptimizer = SGD(lr=0.001, momentum=0.0, nesterov=False)
 
-        self.model.compile(loss='sparse_categorical_crossentropy',
+        self.model.compile(loss='mean_squared_error',
               optimizer=sgdOptimizer,
               metrics=['accuracy'])
 
@@ -27,7 +34,7 @@ class Main:
     #          optimizer='sgd',
     #          metrics=['accuracy'])
 
-        #self.model.compile(loss=keras.losses.categorical_crossentropy,
+        #self.model.compile(loss=keras.losses.categorical_crossentropy
         #      optimizer=keras.optimizers.SGD(lr=0.01, momentum=0.9, nesterov=True)) # use this if we want more control over the varaibles otherwise the other one is simpler
 
     
@@ -36,10 +43,9 @@ class Main:
         y_binary = to_categorical(y_int)
         '''
 
-
         
         while True:
-            ask = int(input("Choose: \n1)Load Data \n2)Train \n3)Predict\n"));
+            ask = int(input("Choose: \n1)Load Data \n2)Train \n3)Predict\n4)Visualize Model\n"));
             if ask == 1:
                 pass;
 
@@ -52,6 +58,11 @@ class Main:
                     if(ask2 == 'q'):
                         break;
                     print(self.predict(ask));
+            if ask == 4:
+                plot_model(self.model, 'model.png', show_shapes=True, show_layer_names=True);
+                os.system("open model.png");
+                print("saved model to model.png");
+
             if ask == 'q':
                 break;
                 
@@ -61,17 +72,13 @@ class Main:
         self.a = np.array([2,3,4,5]);
         
     def train(self):
-        listOfNum = [];
-        for i in self.listOfIn:
-            listOfNum.append(  [int(x) for x in bin(i)[2:] ] ) # this is to convert the number in to binary
 
-        print(listOfNum);
-        listOfNum = np.array(listOfNum);
-        self.model.fit(listOfNum, np.array(self.listOfOut), epochs=50, batch_size=1);
+        listOfNum = np.array(self.listOfIn);
+        self.model.fit(listOfNum, np.array(self.listOfOut), epochs=5, batch_size=1);
                 
     def predict(self, value):
-        num = [int(x) for x in bin(value)[2:] ]  # this is to convert the number in to binary
-        predictInput = np.array([num]);
+        #num = [int(x) for x in bin(value)[2:] ]  # this is to convert the number in to binary
+        predictInput = np.array([value]);
 
         #predictInput.reshape(1,);#this is to reshapee so it does not give errror about dense layer neeidng 2
         print(predictInput.shape);
