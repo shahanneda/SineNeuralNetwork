@@ -13,4 +13,11 @@
 ### After 100000
 ![1000000](sinWave100000epochspicture.png?raw=true "100000")
 
+### After 200000
+![2000000](sinWave200000epochspicture.png?raw=true "200000")
+
+### After 500000
+![5000000](sinWave500000epochspicture.png?raw=true "500000")
+
+
 
