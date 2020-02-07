@@ -4,7 +4,8 @@ from keras.models import Sequential;
 from keras.layers import Dense;
 from keras.utils import plot_model;
 import matplotlib.pyplot as plt;
-import math
+import math;
+from keras.models import load_model;
 import os;
 
 class Main:
@@ -17,18 +18,17 @@ class Main:
         self.createData();
         self.model = Sequential();
 
-        self.model.add(Dense(units=1, activation='sigmoid', input_shape=(1,) ))
+        self.model.add(Dense(units=10, activation='sigmoid', input_shape=(1,) ))
         
-        self.model.add(Dense(units=100, activation='sigmoid'))
-        self.model.add(Dense(units=100, activation='sigmoid'))
+        self.model.add(Dense(units=10, activation='sigmoid'))
 
         self.model.add(Dense(units=1, activation='sigmoid' ) )
 
-        sgdOptimizer = SGD(lr=0.001, momentum=0.0, nesterov=False)
+        sgdOptimizer = SGD(lr=0.01, momentum=0.0, nesterov=False)
 
         self.model.compile(loss='mean_squared_error',
               optimizer=sgdOptimizer,
-              metrics=['accuracy'])
+              metrics=['mean_squared_error'])
 
     #    self.model.compile(loss='sparse_categorical_crossentropy',
     #          optimizer='sgd',
@@ -45,43 +45,56 @@ class Main:
 
         
         while True:
-            ask = int(input("Choose: \n1)Load Data \n2)Train \n3)Predict\n4)Visualize Model\n"));
+            ask = int(input("Choose: \n1)Load Data \n2)Train \n3)Predict\n4)Visualize Model\n5)Graph data and prediction\n6)Save Model\n7)Load Model\nq)quit\n"));
             if ask == 1:
                 pass;
 
             if ask == 2:
                 self.train();
+                self.plotData();
 
             if ask == 3:
                  while True:
                     ask2 = input("Value: ");
                     if(ask2 == 'q'):
                         break;
-                    print(self.predict(ask2));
+                    print(f"The model predicts sin({ask2} to be {self.predict(ask2)}");
             if ask == 4:
                 plot_model(self.model, 'model.png', show_shapes=True, show_layer_names=True);
                 os.system("open model.png");
-                print("saved model to model.png");
+                print("saved model image to model.png");
 
             if ask == 5:
                 self.plotData();
-
+            if ask == 6:
+                self.saveModel();
+            if ask == 7:
+                self.loadModel();
             if ask == 'q':
                 break;
 
                 
         
+    def saveModel(self):
+        self.model.save(input("Enter filename:\n"));
+    def loadModel(self):
+        print("Enter filename:\n", end="");
+        os.system("ls");
+        self.model = load_model(input(""));
 
     def createData(self):
-        for i in range(1,90):
+        for i in range(1,360):
             self.listOfIn.append(i);
             self.listOfOut.append(math.sin(i* (math.pi/180) ));
+
+        self.listOfIn = np.arange(0, math.pi*2, 0.1)
+        self.listOfOut = (np.sin(self.listOfIn) +1) /2
             
         
     def train(self):
 
         listOfNum = np.array(self.listOfIn);
-        self.model.fit(listOfNum, np.array(self.listOfOut), epochs=50, batch_size=1);
+        self.model.fit(listOfNum, np.array(self.listOfOut), epochs=int(input("Epochs:\n")), batch_size=8);
 
         print(self.model.evaluate(np.array(self.listOfIn), np.array(self.listOfOut)));
         
@@ -91,14 +104,14 @@ class Main:
         modelOutput = self.model.predict(self.listOfIn, batch_size=1);
         plt.plot(self.listOfIn, modelOutput);
 
-        plt.show();
+        plt.show(block=False);
 
 
     def predict(self, value):
         #num = [int(x) for x in bin(value)[2:] ]  # this is to convert the number in to binary
-        predictInput = np.array([value]);
-        print(self.listOfIn);
-        print(self.listOfOut);
+        predictInput = np.array([2*value-1]);
+        #print(self.listOfIn);
+        #print(self.listOfOut);
 
         #predictInput.reshape(1,);#this is to reshapee so it does not give errror about dense layer neeidng 2
 
