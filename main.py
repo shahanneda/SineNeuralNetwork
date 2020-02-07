@@ -58,7 +58,7 @@ class Main:
                     ask2 = input("Value: ");
                     if(ask2 == 'q'):
                         break;
-                    print(f"The model predicts sin({ask2} to be {self.predict(ask2)}");
+                    print(f"The model predicts sin({ask2}) to be {self.predict(ask2)}");
             if ask == 4:
                 plot_model(self.model, 'model.png', show_shapes=True, show_layer_names=True);
                 os.system("open model.png");
@@ -77,6 +77,7 @@ class Main:
         
     def saveModel(self):
         self.model.save(input("Enter filename:\n"));
+
     def loadModel(self):
         print("Enter filename:\n", end="");
         os.system("ls");
@@ -109,14 +110,14 @@ class Main:
 
     def predict(self, value):
         #num = [int(x) for x in bin(value)[2:] ]  # this is to convert the number in to binary
-        predictInput = np.array([2*value-1]);
+        predictInput = np.array([value]);
         #print(self.listOfIn);
         #print(self.listOfOut);
 
         #predictInput.reshape(1,);#this is to reshapee so it does not give errror about dense layer neeidng 2
 
         predictions = self.model.predict(predictInput, batch_size=1) # batch size is how many it does at once
-
+        predictions  = 2  * predictions -1;
         return predictions;
 
     def PrintFirst1000IntArray(self):
