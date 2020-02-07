@@ -5,12 +5,12 @@
 ![Alt text](model.png?raw=true "Network Structure")
 
 ### After 1000 epocs:
-![Alt text](sineWave1000epocsphoto.png?raw=true "1000")
+![Alt text](sinWave1000epochsphoto.png?raw=true "1000")
 
 ### After 20000:
-![Alt text](sineWave20000epocsphoto.png?raw=true "20000")
+![Alt text](sinWave20000epochsphoto.png?raw=true "20000")
 
 ### After 100000
-![Alt text](sineWave100000epocsphoto.png?raw=true "100000")
+![Alt text](sinWave100000epochsphoto.png?raw=true "100000")
 
 
