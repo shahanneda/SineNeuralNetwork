@@ -2,7 +2,7 @@
 ## A neural network that approximates the sine function, made using keras 
 
 ### Network structure photo:
-![structure](model.png?raw=true "Network Structure")
+![structure](https://github.com/shahanneda/SineNeuralNetwork/raw/master/model.png?raw=true "Network Structure")
 
 ### After 1000 epocs:
 ![10000](https://github.com/shahanneda/SineNeuralNetwork/raw/master/sinWave1000epochspicture.png?raw=true "1000")
